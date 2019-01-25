@@ -1,0 +1,32 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Author: Adrian Farnell
+# DateTime : Fri 25th Jan, 22:30
+
+#config that impacts vagrant (use v2 vagrant spec)
+Vagrant.configure("2") do |config|
+  
+    #configure a proxy vm
+    config.vm.define "proxy1" do |proxy|
+        
+        #specify template to download from hashicorp
+        proxy.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
+        
+        #hostname of the resultant VM (start of personalisation of template)
+        proxy.vm.hostname = "proxy1"
+
+        #define the networking for the VM
+        proxy.vm.network "forwarded_port", guest: 80, host: 18080, host_ip: "127.0.0.1", auto_correct:true
+        proxy.vm.network :private_network, ip: "192.168.56.150"
+
+        #customise the hardware, virtualbox as the hypervisor. 
+        proxy.vm.provider :virtualbox do |v|
+            v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+            v.customize ["modifyvm", :id, "--memory", 512]
+            v.customize ["modifyvm", :id, "--name", "proxy1"]
+        end
+
+    end
+
+end
