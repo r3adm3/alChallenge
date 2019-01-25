@@ -1,10 +1,9 @@
 
-# AL Challenge, Task 1
-Create a Vagrantfile that creates a single machine using this box: 
+# AL Challenge, Task 2
+Install the nginx webserver via configuration management.
 
-https://vagrantcloud.com/puppetlabs/boxes/ubuntu-14.04-64-nocm
-
-...and installs the latest released version of your chosen configuration management tool.
+## Notes on Design Decisions
+- Use very simple chef desired state to apply required configuration
 
 Tested using:
 * Vagrant 2.2.3
@@ -17,14 +16,13 @@ Run on an internet connected Mac, and type:
 vagrant up
 ~~~
 
-Success looks like:
-
+Success looks like
 ~~~
 Bringing machine 'proxy1' up with 'virtualbox' provider...
 ==> proxy1: Importing base box 'puppetlabs/ubuntu-14.04-64-nocm'...
 ==> proxy1: Matching MAC address for NAT networking...
 ==> proxy1: Checking if box 'puppetlabs/ubuntu-14.04-64-nocm' version '1.0.3' is up to date...
-==> proxy1: Setting the name of the VM: task1_proxy1_1548456641663_64943
+==> proxy1: Setting the name of the VM: task2_proxy1_1548457512917_53021
 ==> proxy1: Using hostname "proxy1" as node name for Chef...
 ==> proxy1: Vagrant has detected a configuration issue which exposes a
 ==> proxy1: vulnerability with the installed version of VirtualBox. The
@@ -69,38 +67,53 @@ Bringing machine 'proxy1' up with 'virtualbox' provider...
 ==> proxy1: Setting hostname...
 ==> proxy1: Configuring and enabling network interfaces...
 ==> proxy1: Mounting shared folders...
-    proxy1: /vagrant => /Users/adrian/Source/github/alChallenge/task1
-    proxy1: /tmp/vagrant-chef/0a15071c4111795d3b33208e3729a129/cookbooks => /Users/adrian/Source/github/alChallenge/task1/cookbooks
+    proxy1: /vagrant => /Users/adrian/Source/github/alChallenge/task2
+    proxy1: /tmp/vagrant-chef/cf96368fd954c8d1761f967657e8553c/cookbooks => /Users/adrian/Source/github/alChallenge/task2/cookbooks
 ==> proxy1: Running provisioner: chef_solo...
     proxy1: Installing Chef (latest)...
 ==> proxy1: Generating chef JSON and uploading...
-==> proxy1: Warning: Chef run list is empty. This may not be what you want.
 ==> proxy1: Running chef-solo...
-==> proxy1: [2019-01-25T14:51:39-08:00] INFO: Started chef-zero at chefzero://localhost:1 with repository at /tmp/vagrant-chef/0a15071c4111795d3b33208e3729a129, /tmp/vagrant-chef
+==> proxy1: [2019-01-25T15:06:14-08:00] INFO: Started chef-zero at chefzero://localhost:1 with repository at /tmp/vagrant-chef/cf96368fd954c8d1761f967657e8553c, /tmp/vagrant-chef
 ==> proxy1:   One version per cookbook
 ==> proxy1: Starting Chef Client, version 14.9.13
-==> proxy1: [2019-01-25T14:51:39-08:00] INFO: *** Chef 14.9.13 ***
-==> proxy1: [2019-01-25T14:51:39-08:00] INFO: Platform: x86_64-linux
-==> proxy1: [2019-01-25T14:51:39-08:00] INFO: Chef-client pid: 2213
-==> proxy1: [2019-01-25T14:51:39-08:00] INFO: The plugin path /etc/chef/ohai/plugins does not exist. Skipping...
-==> proxy1: [2019-01-25T14:51:40-08:00] INFO: Run List is []
-==> proxy1: [2019-01-25T14:51:40-08:00] INFO: Run List expands to []
-==> proxy1: [2019-01-25T14:51:40-08:00] INFO: Starting Chef Run for proxy1
-==> proxy1: [2019-01-25T14:51:40-08:00] INFO: Running start handlers
-==> proxy1: [2019-01-25T14:51:40-08:00] INFO: Start handlers complete.
-==> proxy1: resolving cookbooks for run list: []
-==> proxy1: [2019-01-25T14:51:40-08:00] INFO: Loading cookbooks []
+==> proxy1: [2019-01-25T15:06:14-08:00] INFO: *** Chef 14.9.13 ***
+==> proxy1: [2019-01-25T15:06:14-08:00] INFO: Platform: x86_64-linux
+==> proxy1: [2019-01-25T15:06:14-08:00] INFO: Chef-client pid: 2211
+==> proxy1: [2019-01-25T15:06:14-08:00] INFO: The plugin path /etc/chef/ohai/plugins does not exist. Skipping...
+==> proxy1: [2019-01-25T15:06:15-08:00] INFO: Setting the run_list to ["recipe[nginx]"] from CLI options
+==> proxy1: [2019-01-25T15:06:15-08:00] INFO: Run List is [recipe[nginx]]
+==> proxy1: [2019-01-25T15:06:15-08:00] INFO: Run List expands to [nginx]
+==> proxy1: [2019-01-25T15:06:15-08:00] INFO: Starting Chef Run for proxy1
+==> proxy1: [2019-01-25T15:06:15-08:00] INFO: Running start handlers
+==> proxy1: [2019-01-25T15:06:15-08:00] INFO: Start handlers complete.
+==> proxy1: resolving cookbooks for run list: ["nginx"]
+==> proxy1: [2019-01-25T15:06:15-08:00] INFO: Loading cookbooks [nginx@0.0.0]
 ==> proxy1: Synchronizing Cookbooks:
+==> proxy1: [2019-01-25T15:06:15-08:00] INFO: Storing updated cookbooks/nginx/recipes/default.rb in the cache.
+==> proxy1:   
+==> proxy1: - nginx (0.0.0)
 ==> proxy1: Installing Cookbook Gems:
 ==> proxy1: Compiling Cookbooks...
-==> proxy1: [2019-01-25T14:51:40-08:00] WARN: Node proxy1 has an empty run list.
-==> proxy1: Converging 0 resources
-==> proxy1: [2019-01-25T14:51:40-08:00] INFO: Chef Run complete in 0.043574363 seconds
+==> proxy1: Converging 2 resources
+==> proxy1: Recipe: nginx::default
+==> proxy1:   
+==> proxy1: * apt_package[nginx] action install
+==> proxy1: [2019-01-25T15:06:23-08:00] INFO: apt_package[nginx] installed nginx at 1.4.6-1ubuntu3.9
+==> proxy1: 
+==> proxy1:     - install version 1.4.6-1ubuntu3.9 of package nginx
+==> proxy1:   * service[nginx] action enable
+==> proxy1:  (up to date)
+==> proxy1:   
+==> proxy1: * service[nginx] action start
+==> proxy1:  (up to date)
+==> proxy1: [2019-01-25T15:06:23-08:00] INFO: Chef Run complete in 8.150449522 seconds
 ==> proxy1: 
 ==> proxy1: Running handlers:
-==> proxy1: [2019-01-25T14:51:40-08:00] INFO: Running report handlers
+==> proxy1: [2019-01-25T15:06:23-08:00] INFO: Running report handlers
 ==> proxy1: Running handlers complete
 ==> proxy1: 
-==> proxy1: [2019-01-25T14:51:40-08:00] INFO: Report handlers complete
-==> proxy1: Chef Client finished, 0/0 resources updated in 01 seconds
+==> proxy1: [2019-01-25T15:06:23-08:00] INFO: Report handlers complete
+==> proxy1: Chef Client finished, 1/3 resources updated in 09 seconds
 ~~~
+
+To test nginx go to http://localhost:18080/ in a browser
