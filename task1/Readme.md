@@ -9,7 +9,7 @@ https://vagrantcloud.com/puppetlabs/boxes/ubuntu-14.04-64-nocm
 # Important Design Decisions
 * only 1, picked Chef as I've used it for Proof of Concepts before. 
 
-##Tested using:
+## Tested using:
 * Vagrant 2.2.3
 * VirtualBox 5.2.18
 * MacOS 10.14.2

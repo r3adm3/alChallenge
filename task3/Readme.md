@@ -5,7 +5,7 @@ Run a simple test using Vagrant's shell provisioner to ensure that nginx is list
 ## Notes on Design Decisions
 * Write the port 80 test in shell script using lsof as its a standard linux tool. 
 
-##Tested using:
+## Tested using:
 * Vagrant 2.2.3
 * VirtualBox 5.2.18
 * MacOS 10.14.2

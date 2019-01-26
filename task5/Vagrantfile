@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Author: Adrian Farnell
-# DateTime : Sat 26th Jan, 21:07
+# DateTime : Sat 26th Jan, 21:42 (only changes in cookbooks/nginx/recipes/*)
 
 #config that impacts vagrant (use v2 vagrant spec)
 Vagrant.configure("2") do |config|

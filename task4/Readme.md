@@ -5,7 +5,7 @@ Again, using configuration management, update contents of /etc/sudoers file so t
 ## Notes on Design Decisions
 
 
-##Tested using:
+## Tested using:
 * Vagrant 2.2.3
 * VirtualBox 5.2.18
 * MacOS 10.14.2
