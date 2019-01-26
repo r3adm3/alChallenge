@@ -6,6 +6,9 @@ https://vagrantcloud.com/puppetlabs/boxes/ubuntu-14.04-64-nocm
 
 ...and installs the latest released version of your chosen configuration management tool.
 
+# Important Design Decisions
+* only 1, picked Chef as I've used it for Proof of Concepts before. 
+
 Tested using:
 * Vagrant 2.2.3
 * VirtualBox 5.2.18
