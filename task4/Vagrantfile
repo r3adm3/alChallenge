@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Author: Adrian Farnell
+# DateTime : Sat 26th Jan, 20:43
+
+#config that impacts vagrant (use v2 vagrant spec)
+Vagrant.configure("2") do |config|
+  
+    #configure a proxy vm
+    config.vm.define "proxy1" do |proxy|
+        
+        #specify template to download from hashicorp
+        proxy.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
+        
+        #hostname of the resultant VM (start of personalisation of template)
+        proxy.vm.hostname = "proxy1"
+
+        #define the networking for the VM (forward local port 18080 to port 80 inside the VM)
+        proxy.vm.network "forwarded_port", guest: 80, host: 18080, host_ip: "127.0.0.1", auto_correct:true
+        proxy.vm.network :private_network, ip: "192.168.56.150"
+
+        #using chef to install nginx
+        proxy.vm.provision :chef_solo do |chef|
+            chef.run_list = [
+                "recipe[nginx]",
+                "recipe[sudoConfig]"
+            ]
+        end
+
+        #using shell script as lsof exists on all Linux boxes.
+        proxy.vm.provision "shell", inline: <<-SHELL
+            if lsof -Pi :80 -sTCP:LISTEN -t > /dev/null; then
+                echo "proxy1 nginx is running"
+            else
+                echo "proxy1 nginx is not running"
+            fi
+            SHELL
+
+        #customise the hardware, virtualbox as the hypervisor. 
+        proxy.vm.provider :virtualbox do |v|
+            v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+            v.customize ["modifyvm", :id, "--memory", 512]
+            v.customize ["modifyvm", :id, "--name", "proxy1"]
+        end
+
+    end
+
+end
