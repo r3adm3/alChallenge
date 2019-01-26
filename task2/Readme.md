@@ -5,7 +5,7 @@ Install the nginx webserver via configuration management.
 ## Notes on Design Decisions
 - Use very simple chef desired state to apply required configuration
 
-Tested using:
+##Tested using:
 * Vagrant 2.2.3
 * VirtualBox 5.2.18
 * MacOS 10.14.2
