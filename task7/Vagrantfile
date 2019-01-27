@@ -10,7 +10,8 @@ Vagrant.configure("2") do |config|
     #configure a proxy vm
     config.vm.define "proxy1" do |proxy|
         
-        #specify template to download from hashicorp
+        #specify template to download from hashicorp (see readme for why 14.04 was swapped out)
+        #proxy.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
         proxy.vm.box = "ubuntu/xenial64"
         
         #hostname of the resultant VM (start of personalisation of template)
@@ -18,6 +19,7 @@ Vagrant.configure("2") do |config|
 
         #define the networking for the VM (forward local port 18080 to port 80 inside the VM)
         proxy.vm.network "forwarded_port", guest: 80, host: 18080, host_ip: "127.0.0.1", auto_correct:true
+        proxy.vm.network "forwarded_port", guest: 443, host: 18443, host_ip: "127.0.0.1", auto_correct:true
         proxy.vm.network :private_network, ip: "192.168.56.150"
 
         #using chef to install nginx
@@ -25,7 +27,8 @@ Vagrant.configure("2") do |config|
             chef.run_list = [
                 "recipe[nginx]",
                 "recipe[sudoConfig]",
-                "recipe[dotnetCore]"
+                "recipe[dotnetCore]",
+                "recipe[webapp]"
             ]
         end
 
