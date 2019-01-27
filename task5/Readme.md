@@ -4,7 +4,7 @@ Make the solution idempotent so that re-running the provisioning step will not r
 
 ## Notes on Design Decisions
 Added an nginx config template file to show that running a provision is 
-handled idempotently. Make changes to 
+handled idempotently. 
 
 ## Tested using:
 * Vagrant 2.2.3
