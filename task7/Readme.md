@@ -10,7 +10,10 @@ Sat 26th Jan 23:17 Spent two hours in here trying to get .net core 2 and ubuntu 
 
 Sun 27th Jan 22:00 Having issues getting nginx to forward to dotnet core app whilst running. Vagrant up does run at the moment, but no successful test running yet. webapp is running but not accessible to the host via nginx, webapp inside vagrant can be run with **curl -k https://localhost:5001**
 
-## Tested using:
+Mon 28th Jan, issues with .net core and nginx were due to redirects in the boiler plate which auto-redirected the http site hosted on port 5000 to https on port 5001. Removed that config and added a load balancer config for nginx which works now.
+
+## Tested using
+
 * Vagrant 2.2.3
 * VirtualBox 5.2.18
 * MacOS 10.14.2
@@ -18,10 +21,8 @@ Sun 27th Jan 22:00 Having issues getting nginx to forward to dotnet core app whi
 Run on an internet connected Mac, and type:
 
 ~~~
-
+vagrant up
 ~~~
 
-Success looks like
-~~~
-
-~~~
+Success looks like Hello World site (in a browser)
+http://localhost:18080

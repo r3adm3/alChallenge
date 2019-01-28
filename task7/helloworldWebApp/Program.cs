@@ -19,7 +19,8 @@ namespace helloworldWebApp
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseUrls("https://localhost:5001", "http://192.168.56.150:5001");
+                .UseUrls("http://*:5000")
+                .UseStartup<Startup>();
+              
     }
 }

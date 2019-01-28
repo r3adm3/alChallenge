@@ -6,13 +6,30 @@ package 'nginx' do
   action :install
 end
 
-#ensures nginx service is enabled and started
-service 'nginx' do
-  action [:enable, :start]
+file "/etc/nginx/sites-enabled/default" do
+  action :delete
 end
 
-#enforce an nginx config, only reload if it changes on provision
-template "/etc/nginx/nginx.conf" do   
-  source "nginx.conf.erb"
-  notifies :reload, "service[nginx]"
+file "/etc/nginx/conf.d/load-balancer.conf" do
+  content "upstream dotnet {
+    server localhost:5000; 
+}
+
+# This server accepts all traffic to port 80 and passes it to the upstream. 
+# Notice that the upstream name and the proxy_pass need to match.
+
+server {
+ listen 80; 
+
+ location / {
+    proxy_pass http://dotnet;
+    proxy_set_header Host $host;
+ }
+}"
 end
+
+#ensures nginx service is enabled and started
+service 'nginx' do
+  action [:enable, :restart]
+end
+
