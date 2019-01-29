@@ -8,6 +8,36 @@ Added in two web servers web2 and web3
 lsof test that worked on nginx, doesn't appear to work with dotnet core. 
 replaced simple test with a wget to check if the website on each of the webs is there
 
+Here is the network diagram:
+
+                   +-----+ Virtualbox/Vagrant Host
+                   |     |
+                   |     |
+                 +---------+
+                 |         |
+                 +---------+
+                      |
+                      |
+                      | http://localhost:18080/daed.html
+                      |
+                      v  10.2.0.15
+               +----------------+
+               |    nginx       |
+               |    proxy1      |
+               |                |
+               | 192.168.56.150 |
+               +----------------+
+                      |
+             +--------v----------+
+             |                   |
+             |                   |
+    +--------v-------+   +-------v------+
+    | 192.168.56.152 |   |192.168.56.153|
+    |                |   |              |
+    |                |   |              |
+    |      web2      |   |     web3     |
+    +----------------+   +--------------+
+
 ## Tested using
 
 * Vagrant 2.2.3
@@ -20,4 +50,4 @@ Run on an internet connected Mac, and type:
 vagrant up
 ~~~
 
-Test for success by hitting http://localhost:18080 on the host machine. 
+Test for success by hitting http://localhost:18080 on the host machine.

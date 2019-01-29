@@ -48,44 +48,56 @@ Vagrant.configure("2") do |config|
 
     end
 
+    #config up a webserver, call him web2
     config.vm.define "web2" do |web|
+
+        #use ubuntu xenial
         web.vm.box = "ubuntu/xenial64"
         web.vm.hostname = 'web2'
 
+        #hard configure an ip, no port forwarding needed, since we're accessing via nginx
         web.vm.network :private_network, ip: "192.168.56.152"
 
+        #config the hardware
         web.vm.provider :virtualbox do |v|
             v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
             v.customize ["modifyvm", :id, "--memory", 512]#      v.customize ["modifyvm", :id, "--name", "web2"]
         end
 
+        #install chef-solo and run recipes, reuse sudoConfig, install dotnetcore and install webapp
         web.vm.provision :chef_solo do |chef|
             chef.run_list = [
-            "recipe[nginx]",
             "recipe[sudoConfig]",
             "recipe[dotnetCore]",
             "recipe[webapp]"     
           ]
         end
 
+        #test the site
         web.vm.provision "shell", inline: <<-SHELL
             wget -S http://localhost:5000
         SHELL
 
     end
 
+    #config up a webserver, call him web2
     config.vm.define "web3" do |web|
+
+        #use ubuntu xenial
         web.vm.box = "ubuntu/xenial64"
         web.vm.hostname = 'web3'
 
+        #hard configure an ip, no port forwarding needed, since we're accessing via nginx
         web.vm.network :private_network, ip: "192.168.56.153"
 
+        #config the hardware
         web.vm.provider :virtualbox do |v|
             v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
             v.customize ["modifyvm", :id, "--memory", 512]
             v.customize ["modifyvm", :id, "--name", "web3"]
         end
 
+        #install chef-solo and run recipes, reuse sudoConfig, install dotnetcore and install webapp
         web.vm.provision :chef_solo do |chef|
             chef.run_list = [
             "recipe[nginx]",
@@ -96,6 +108,7 @@ Vagrant.configure("2") do |config|
         ]
         end
 
+        #test the site
         web.vm.provision "shell", inline: <<-SHELL
             wget -S http://localhost:5000
         SHELL

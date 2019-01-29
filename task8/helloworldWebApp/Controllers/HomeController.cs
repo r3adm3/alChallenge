@@ -10,28 +10,32 @@ namespace helloworldWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        string name = Environment.MachineName;
+
         public IActionResult Index()
         {
+            ViewData["Message"] = "[" + name + "]";
+
             return View();
         }
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Your application description page. [" + name + "]" ;
 
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Your contact page. [" + name + "]";
 
             return View();
         }
 
         public IActionResult Chuck()
         {
-            ViewData["Message"] = "The Chuck Norris Page";
+            ViewData["Message"] = "The Chuck Norris Page. [" + name + "]";
 
             return View();
         }
