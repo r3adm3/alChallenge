@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Hello World";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>Chuck Norris!</p>
+
+<button onclick="getQuote()">Get Quote</button>
+<br /><br />
+<div id="result"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script>
+
+    function getQuote(){
+
+        console.log ("test");
+
+        $.get( "https://api.chucknorris.io/jokes/random", function( data ) {
+            console.log (data)
+            $("#result").text(data.value);
+        });
+
+        }
+
+</script>
