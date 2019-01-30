@@ -51,3 +51,35 @@ vagrant up
 ~~~
 
 Test for success by hitting http://localhost:18080 on the host machine.
+
+Look for  **test1: Proxy1 serving content from both Web2 and Web3** at the bottom of the vagrant provision. 
+
+Here is the network diagram of the final solution:
+
+                   +-----+ Virtualbox/Vagrant Host
+                   |     |
+                   |     |
+                 +---------+
+                 |         |
+                 +---------+
+                      |
+                      |
+                      | http://localhost:18080/daed.html
+                      |
+                      v  10.2.0.15
+               +----------------+
+               |    nginx       |       +-------+
+               |    proxy1      <-------+ test1 |
+               |                |       +-------+
+               | 192.168.56.150 |         192.168.56.154
+               +----------------+
+                      |
+             +--------v----------+
+             |                   |
+             |                   |
+    +--------v-------+   +-------v------+
+    | 192.168.56.152 |   |192.168.56.153|
+    |                |   |              |
+    |                |   |              |
+    |      web2      |   |     web3     |
+    +----------------+   +--------------+

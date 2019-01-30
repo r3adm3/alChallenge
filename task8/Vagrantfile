@@ -73,10 +73,6 @@ Vagrant.configure("2") do |config|
           ]
         end
 
-        #test the site
-        web.vm.provision "shell", inline: <<-SHELL
-            wget -S http://localhost:5000
-        SHELL
 
     end
 
@@ -108,10 +104,47 @@ Vagrant.configure("2") do |config|
         ]
         end
 
-        #test the site
-        web.vm.provision "shell", inline: <<-SHELL
-            wget -S http://localhost:5000
-        SHELL
     end     
+
+    config.vm.define "test1" do |test|
+        test.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
+        test.vm.hostname = 'test1'
+
+        test.vm.network :private_network, ip: "192.168.56.154"
+
+        test.vm.provider :virtualbox do |v|
+            v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+            v.customize ["modifyvm", :id, "--memory", 512]#      
+            v.customize ["modifyvm", :id, "--name", "web2"]
+        end
+
+        test.vm.provision :chef_solo do |chef|
+        chef.run_list = [
+            "recipe[sudoConfig]",
+            "recipe[testScript]"
+        ]
+        end     
+
+        test.vm.provision "shell", inline: <<-SHELL
+            #!/bin/bash
+
+            #Loop 5 times just to get a good sample and save all results in result.txt
+
+            for X in 1 2 3 4 5 
+            do 
+                curl -s http://192.168.56.150/ >> /home/vagrant/result.txt 
+            done
+
+            #check contents of results.txt and make sure both web2 and web3 strings are present. 
+            testoutput=$(awk '/[web2]/ && /[web3]/' result.txt|awk '{print length}')
+
+            if [ "$testoutput" == "" ]; then
+                    echo 'Proxy1 failing to serve content from both Web2 and Web3'
+            else
+                    echo 'Proxy1 serving content from both Web2 and Web3'
+            fi
+        SHELL
+
+    end
 
 end
